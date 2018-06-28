@@ -35,13 +35,6 @@ function shuffle(array) {
 }
 
 
-/*function startGame(){
-    shuffle(cardsArray);
-    emptyDeck();
-    refillDeck();
-}*/
-
-
 function closeCards(array) {
     for (let i = 0; i < array.length; i++) {
         array[i].classList.remove('open', 'show');
@@ -67,12 +60,20 @@ function compareCards() {
 }
 
 
+function movesCount() {
+    let numberOfMoves = Number(document.querySelector('.moves').innerHTML);
+    numberOfMoves += 1;
+    document.querySelector('.moves').innerHTML = numberOfMoves;
+}
+
+
 function openCard(index) {
     if (openCardsArray.length < 2) {
         openCardsArray.push(cardsArray[index]);
         cardsArray[index].classList.add('open', 'show');
     }
     if (openCardsArray.length === 2) {
+        movesCount();
         compareCards();
         if (compareCards() === true) {
             openCardsArray.length = 0;
@@ -116,6 +117,8 @@ const cardsArray = Array.prototype.slice.call(cards);
 const openCards = document.getElementsByClassName('open');
 const openCardsArray = Array.prototype.slice.call(openCards);
 const deck = document.querySelector(".deck");
+
+//let moves = document.querySelector('.moves');
 
 
 // Vil lage en liste med alle klassene. Må hente dem ut fra HTML-en og legge dem i en array
