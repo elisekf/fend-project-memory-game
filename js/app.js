@@ -26,32 +26,13 @@ function shuffle(array) {
 }
 
 
-// Adds event listeners to all cards so that they turn when clicked
-/*function openCard(index) {
-    cardsArray[index].classList.toggle('open');
-    cardsArray[index].classList.toggle('show');
-}
-
-let cards = document.getElementsByTagName('li');
-const cardsArray = Array.prototype.slice.call(cards);
-
-const openCards = document.getElementsByClassName('open');
-const openCardsArray = Array.prototype.slice.call(openCards);
-
-for (let i = 0; i < cardsArray.length; i++) {
-    cardsArray[i].addEventListener('click', function() {
-        openCard(i);
-    });
-}*/
-
 function closeCards(array) {
-    /*array.forEach(function(element) {
-        element.classList.remove('open', 'show');
-    })*/
     for (let i = 0; i < array.length; i++) {
         array[i].classList.remove('open', 'show');
     }
+    openCardsArray.length = 0;
 }
+
 
 function compareCards() {
     let firstCard = openCardsArray[0].getElementsByTagName('i');
@@ -67,8 +48,8 @@ function compareCards() {
     } else {
         return false;
     }
-    
 }
+
 
 function openCard(index) {
     if (openCardsArray.length < 2) {
@@ -76,19 +57,16 @@ function openCard(index) {
         cardsArray[index].classList.add('open', 'show');
     }
     if (openCardsArray.length === 2) {
-        compareCards(); // funksjon som sjekker om kortene er like
-        if (compareCards() === true) { //fjern fra openCardsArray
+        compareCards();
+        if (compareCards() === true) {
             openCardsArray.length = 0;
-        } else if (compareCards() === false) { // hvis ulike: snu kortene og fjern fra openCardsArray
-            /*setTimeout(function() {
-                closeCards(openCardsArray)
-            }, 2000);*/
-            closeCards(openCardsArray);
-            openCardsArray.length = 0;
+        } else if (compareCards() === false) {
+            setTimeout(closeCards, 600, openCardsArray);
         }
         
     }
 }
+
 
 const cards = document.getElementsByTagName('li');
 const cardsArray = Array.prototype.slice.call(cards);
@@ -96,13 +74,15 @@ const cardsArray = Array.prototype.slice.call(cards);
 const openCards = document.getElementsByClassName('open');
 const openCardsArray = Array.prototype.slice.call(openCards);
 
-
 for (let i = 0; i < cardsArray.length; i++) {
     cardsArray[i].addEventListener('click', function() {
         openCard(i);
     });
 }
-  
+
+
+
+
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
