@@ -11,6 +11,15 @@
  */
 
 // Shuffle function from http://stackoverflow.com/a/2450976
+
+
+/*function emptyDeck() {
+    while (deck.firstChild) {
+        deck.removeChild(deck.firstChild);
+    }
+}*/
+
+
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -21,9 +30,16 @@ function shuffle(array) {
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-
+    
     return array;
 }
+
+
+/*function startGame(){
+    shuffle(cardsArray);
+    emptyDeck();
+    refillDeck();
+}*/
 
 
 function closeCards(array) {
@@ -68,17 +84,48 @@ function openCard(index) {
 }
 
 
-const cards = document.getElementsByTagName('li');
-const cardsArray = Array.prototype.slice.call(cards);
+function startGame() {
+    // Fyller cardClasses med alle klassene
+    for (let i = 0; i < cardsArray.length; i++) {
+        let cardClass = cardsArray[i].firstElementChild.className;
+        cardClasses.push(cardClass);
+    }
 
+    // Deler opp elementene i cardClasses til nye arrays
+    for (let i = 0; i < cardClasses.length; i++) {
+        cardClasses[i] = cardClasses[i].split(' ');
+    }
+
+    // Stokker kortene, erstatter klassene
+    shuffle(cardClasses);
+    for (let i = 0; i < cardsArray.length; i++) {
+        cardsArray[i].firstElementChild.className = '';
+        cardsArray[i].firstElementChild.classList.add('fa', cardClasses[i][1]);
+    }
+
+    for (let i = 0; i < cardsArray.length; i++) {
+        cardsArray[i].addEventListener('click', function() {
+            openCard(i);
+        });
+    }   
+}
+
+
+const cards = document.getElementsByClassName('card');
+const cardsArray = Array.prototype.slice.call(cards);
 const openCards = document.getElementsByClassName('open');
 const openCardsArray = Array.prototype.slice.call(openCards);
+const deck = document.querySelector(".deck");
 
-for (let i = 0; i < cardsArray.length; i++) {
-    cardsArray[i].addEventListener('click', function() {
-        openCard(i);
-    });
-}
+
+// Vil lage en liste med alle klassene. Må hente dem ut fra HTML-en og legge dem i en array
+const cardClasses = [];
+
+
+// Når spillet starter (onload):
+window.onload = startGame();
+
+
 
 
 
