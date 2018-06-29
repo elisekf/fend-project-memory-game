@@ -85,13 +85,15 @@ function openCard(index) {
     }
 }
 
+function stopTimer() {
+    clearInterval(startTimer);
+}
 
 function timer() {
     let time = Number(document.querySelector('.timer').innerHTML);
     time += 1;
-    if (pairs.length >= 4) {
-        const time = time;
-        alert(time);
+    if (pairs.length >= 8) {
+        stopTimer();
     }
     document.querySelector('.timer').innerHTML = time;
 }
@@ -126,14 +128,15 @@ function restartGame() {
     for (let i = 0; i < cardsArray.length; i++) {
         cardsArray[i].className = 'card';
     }
-    
+
+    pairs.length = 0;
     startGame();
+    stopTimer();
+    startTimer = setInterval(timer, 1000);
 }
 
 
 function loadGame() {
-    //Starter timer
-    setInterval(timer, 1000);
     startGame();
 
     restart.addEventListener('click', restartGame);
@@ -147,7 +150,7 @@ function loadGame() {
 
 
 
-
+let startTimer = setInterval(timer, 1000);    //Må være utenfor en funksjon
 
 const cards = document.getElementsByClassName('card');
 const cardsArray = Array.prototype.slice.call(cards);
