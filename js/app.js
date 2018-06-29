@@ -85,6 +85,13 @@ function openCard(index) {
 }
 
 
+function timer() {
+    let time = Number(document.querySelector('.timer').innerHTML);
+    time += 1;
+    document.querySelector('.timer').innerHTML = time;
+}
+
+
 function startGame() {
     // Fyller cardClasses med alle klassene
     for (let i = 0; i < cardsArray.length; i++) {
@@ -103,6 +110,28 @@ function startGame() {
         cardsArray[i].firstElementChild.className = '';
         cardsArray[i].firstElementChild.classList.add('fa', cardClasses[i][1]);
     }
+}
+
+
+function restartGame() {
+    document.querySelector('.timer').innerHTML = 0;
+    document.querySelector('.moves').innerHTML = 0;
+    cardClasses.length = 0;
+
+    for (let i = 0; i < cardsArray.length; i++) {
+        cardsArray[i].className = 'card';
+    }
+    
+    startGame();
+}
+
+
+function loadGame() {
+    //Starter timer
+    setInterval(timer, 1000);
+    startGame();
+
+    restart.addEventListener('click', restartGame);
 
     for (let i = 0; i < cardsArray.length; i++) {
         cardsArray[i].addEventListener('click', function() {
@@ -112,11 +141,15 @@ function startGame() {
 }
 
 
+
+
+
 const cards = document.getElementsByClassName('card');
 const cardsArray = Array.prototype.slice.call(cards);
 const openCards = document.getElementsByClassName('open');
 const openCardsArray = Array.prototype.slice.call(openCards);
-const deck = document.querySelector(".deck");
+const deck = document.querySelector('.deck');
+const restart = document.querySelector('.restart');
 
 //let moves = document.querySelector('.moves');
 
@@ -126,7 +159,7 @@ const cardClasses = [];
 
 
 // Når spillet starter (onload):
-window.onload = startGame();
+window.onload = loadGame();
 
 
 
