@@ -64,6 +64,14 @@ function movesCount() {
     let numberOfMoves = Number(document.querySelector('.moves').innerHTML);
     numberOfMoves += 1;
     document.querySelector('.moves').innerHTML = numberOfMoves;
+
+    if (numberOfMoves === 18) {
+        starsArray[0].classList.add('hidden');
+    } else if (numberOfMoves === 24) {
+        starsArray[1].classList.add('hidden');
+    } else if (numberOfMoves === 29) {
+        starsArray[2].classList.add('hidden');
+    }
 }
 
 
@@ -133,6 +141,10 @@ function restartGame() {
     startGame();
     stopTimer();
     startTimer = setInterval(timer, 1000);
+
+    for (let i = 0; i < starsArray.length; i++) {
+        starsArray[i].classList.remove('hidden');
+    }
 }
 
 
@@ -159,6 +171,9 @@ const openCardsArray = Array.prototype.slice.call(openCards);
 const deck = document.querySelector('.deck');
 const restart = document.querySelector('.restart');
 const pairs = [];
+
+const stars = document.getElementsByClassName('fa-star');
+const starsArray = Array.prototype.slice.call(stars);
 
 //let moves = document.querySelector('.moves');
 
