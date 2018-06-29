@@ -76,6 +76,7 @@ function openCard(index) {
         movesCount();
         compareCards();
         if (compareCards() === true) {
+            pairs.push(cardsArray[index])
             openCardsArray.length = 0;
         } else if (compareCards() === false) {
             setTimeout(closeCards, 600, openCardsArray);
@@ -88,6 +89,10 @@ function openCard(index) {
 function timer() {
     let time = Number(document.querySelector('.timer').innerHTML);
     time += 1;
+    if (pairs.length >= 4) {
+        const time = time;
+        alert(time);
+    }
     document.querySelector('.timer').innerHTML = time;
 }
 
@@ -150,6 +155,7 @@ const openCards = document.getElementsByClassName('open');
 const openCardsArray = Array.prototype.slice.call(openCards);
 const deck = document.querySelector('.deck');
 const restart = document.querySelector('.restart');
+const pairs = [];
 
 //let moves = document.querySelector('.moves');
 
