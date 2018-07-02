@@ -10,16 +10,95 @@
  *   - add each card's HTML to the page
  */
 
-// Shuffle function from http://stackoverflow.com/a/2450976
+// Er rekkefølgen på funksjonene god?
 
 
-/*function emptyDeck() {
-    while (deck.firstChild) {
-        deck.removeChild(deck.firstChild);
+// Turns open cards if they don't match and removes them from openCardsArray
+function closeCards(array) {
+    for (let i = 0; i < array.length; i++) {
+        array[i].classList.remove('open', 'show');
     }
-}*/
+    openCardsArray.length = 0;
+}
 
 
+function stopTimer() {
+    clearInterval(startTimer);
+}
+
+// Adds 1 to time every time function is called
+function timer() {
+    let time = Number(document.querySelector('.timer').innerHTML);
+    time += 1;
+    
+    // Timer stops when game is won
+    if (pairs.length >= 8) {
+        stopTimer();
+    }
+    document.querySelector('.timer').innerHTML = time;
+}
+
+// Is run when two cards are opened
+function compareCards() {
+    // Creates arrays of the classes of the two cards
+    let firstCard = openCardsArray[0].getElementsByTagName('i');
+    let firstCardArray = Array.prototype.slice.call(firstCard);
+    let firstListOfClasses = firstCardArray[0].className.split(' ');
+
+    let secondCard = openCardsArray[1].getElementsByTagName('i');
+    let secondCardArray = Array.prototype.slice.call(secondCard);
+    let secondListOfClasses = secondCardArray[0].className.split(' ');
+
+    // The last class of each array are compared
+    if (firstListOfClasses[firstListOfClasses.length - 1] === secondListOfClasses[secondListOfClasses.length - 1]) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+function movesCount() {
+    // Counts turns taken
+    let numberOfMoves = Number(document.querySelector('.moves').innerHTML);
+    numberOfMoves += 1;
+    document.querySelector('.moves').innerHTML = numberOfMoves;
+
+    // Removes stars after certain amount of turns
+    if (numberOfMoves === 18) {
+        starsArray[0].classList.add('hidden');
+    } else if (numberOfMoves === 24) {
+        starsArray[1].classList.add('hidden');
+    } else if (numberOfMoves === 29) {
+        starsArray[2].classList.add('hidden');
+    }
+}
+
+
+function openCard(index) {
+    // Clicked cards go into openCardsArray until the array contains two cards
+    if (openCardsArray.length < 2) {
+        openCardsArray.push(cardsArray[index]);
+        cardsArray[index].classList.add('open', 'show');
+    }
+
+    // When two cards are open, the turn is counted and the cards are compared
+    // If the cards match, they are added to the pairs array and openCardsArray is emptied
+    // If the cards don't match, they are hidden again 
+    if (openCardsArray.length === 2) {
+        movesCount();
+        compareCards();
+        if (compareCards() === true) {
+            pairs.push(cardsArray[index]);
+            openCardsArray.length = 0;
+        } else if (compareCards() === false) {
+            setTimeout(closeCards, 600, openCardsArray);
+        }
+    }
+}
+
+
+// Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -34,99 +113,26 @@ function shuffle(array) {
     return array;
 }
 
-
-function closeCards(array) {
-    for (let i = 0; i < array.length; i++) {
-        array[i].classList.remove('open', 'show');
-    }
-    openCardsArray.length = 0;
-}
-
-
-function compareCards() {
-    let firstCard = openCardsArray[0].getElementsByTagName('i');
-    let firstCardArray = Array.prototype.slice.call(firstCard);
-    let firstListOfClasses = firstCardArray[0].className.split(' ');
-
-    let secondCard = openCardsArray[1].getElementsByTagName('i');
-    let secondCardArray = Array.prototype.slice.call(secondCard);
-    let secondListOfClasses = secondCardArray[0].className.split(' ');
-
-    if (firstListOfClasses[firstListOfClasses.length - 1] === secondListOfClasses[secondListOfClasses.length - 1]) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-
-function movesCount() {
-    let numberOfMoves = Number(document.querySelector('.moves').innerHTML);
-    numberOfMoves += 1;
-    document.querySelector('.moves').innerHTML = numberOfMoves;
-
-    if (numberOfMoves === 18) {
-        starsArray[0].classList.add('hidden');
-    } else if (numberOfMoves === 24) {
-        starsArray[1].classList.add('hidden');
-    } else if (numberOfMoves === 29) {
-        starsArray[2].classList.add('hidden');
-    }
-}
-
-
-function openCard(index) {
-    if (openCardsArray.length < 2) {
-        openCardsArray.push(cardsArray[index]);
-        cardsArray[index].classList.add('open', 'show');
-    }
-    if (openCardsArray.length === 2) {
-        movesCount();
-        compareCards();
-        if (compareCards() === true) {
-            pairs.push(cardsArray[index])
-            openCardsArray.length = 0;
-        } else if (compareCards() === false) {
-            setTimeout(closeCards, 600, openCardsArray);
-        }
-        
-    }
-}
-
-function stopTimer() {
-    clearInterval(startTimer);
-}
-
-function timer() {
-    let time = Number(document.querySelector('.timer').innerHTML);
-    time += 1;
-    if (pairs.length >= 8) {
-        stopTimer();
-    }
-    document.querySelector('.timer').innerHTML = time;
-}
-
-
+ 
 function startGame() {
-    // Fyller cardClasses med alle klassene
+    // Puts classes of all cards into the cardClasses array
     for (let i = 0; i < cardsArray.length; i++) {
         let cardClass = cardsArray[i].firstElementChild.className;
         cardClasses.push(cardClass);
     }
 
-    // Deler opp elementene i cardClasses til nye arrays
+    // Turns each element into new arrays
     for (let i = 0; i < cardClasses.length; i++) {
         cardClasses[i] = cardClasses[i].split(' ');
     }
 
-    // Stokker kortene, erstatter klassene
+    // Shuffles the cardClasses array, removes all classes from the cards, replaces them with the same classes again but in a new order
     shuffle(cardClasses);
     for (let i = 0; i < cardsArray.length; i++) {
         cardsArray[i].firstElementChild.className = '';
         cardsArray[i].firstElementChild.classList.add('fa', cardClasses[i][1]);
     }
 }
-
 
 function restartGame() {
     document.querySelector('.timer').innerHTML = 0;
@@ -150,39 +156,33 @@ function restartGame() {
 
 function loadGame() {
     startGame();
-
+    
+    // Adds event listeners to all the cards and the restart button
     restart.addEventListener('click', restartGame);
-
     for (let i = 0; i < cardsArray.length; i++) {
         cardsArray[i].addEventListener('click', function() {
             openCard(i);
-        });
+        })
     }   
 }
 
 
-
-let startTimer = setInterval(timer, 1000);    //Må være utenfor en funksjon
-
 const cards = document.getElementsByClassName('card');
-const cardsArray = Array.prototype.slice.call(cards);
 const openCards = document.getElementsByClassName('open');
-const openCardsArray = Array.prototype.slice.call(openCards);
+const stars = document.getElementsByClassName('fa-star');
 const deck = document.querySelector('.deck');
 const restart = document.querySelector('.restart');
-const pairs = [];
 
-const stars = document.getElementsByClassName('fa-star');
+const cardsArray = Array.prototype.slice.call(cards);
+const openCardsArray = Array.prototype.slice.call(openCards);
 const starsArray = Array.prototype.slice.call(stars);
+const pairs = [];
+const cardClasses = [];
 
 //let moves = document.querySelector('.moves');
 
+let startTimer = setInterval(timer, 1000);    //Må være utenfor en funksjon
 
-// Vil lage en liste med alle klassene. Må hente dem ut fra HTML-en og legge dem i en array
-const cardClasses = [];
-
-
-// Når spillet starter (onload):
 window.onload = loadGame();
 
 
