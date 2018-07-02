@@ -83,8 +83,10 @@ function movesCount() {
 
 
 function openCard(index) {
-    startTimer = setInterval(timer, 1000);    //Må være utenfor en funksjon
-    
+    if (startTimer == 0) {
+        startTimer = setInterval(timer, 1000);
+    }
+
     // Clicked cards go into openCardsArray until the array contains two cards
     if (openCardsArray.length < 2) {
         openCardsArray.push(cardsArray[index]);
@@ -155,7 +157,7 @@ function restartGame() {
     pairs.length = 0;
     startGame();
     stopTimer();
-    //startTimer = setInterval(timer, 1000);
+    startTimer = 0;
 
     for (let i = 0; i < starsArray.length; i++) {
         starsArray[i].classList.remove('hidden');
@@ -194,11 +196,7 @@ const starsArray = Array.prototype.slice.call(stars);
 const pairs = [];
 const cardClasses = [];
 let numberOfStars = 3;
-
-//let moves = document.querySelector('.moves');
-
-//let startTimer = setInterval(timer, 1000);    //Må være utenfor en funksjon
-let startTimer;
+let startTimer = 0;
 
 window.onload = loadGame();
 
