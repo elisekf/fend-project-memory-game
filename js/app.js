@@ -34,8 +34,11 @@ function timer() {
     // Timer stops when game is won
     if (pairs.length >= 8) {
         stopTimer();
+        document.querySelector('.number-of-stars').innerHTML = numberOfStars;
+        modal.style.display = 'block';
     }
     document.querySelector('.timer').innerHTML = time;
+    document.querySelector('.seconds').innerHTML = time;
 }
 
 // Is run when two cards are opened
@@ -63,14 +66,18 @@ function movesCount() {
     let numberOfMoves = Number(document.querySelector('.moves').innerHTML);
     numberOfMoves += 1;
     document.querySelector('.moves').innerHTML = numberOfMoves;
+    document.querySelector('.number-of-moves').innerHTML = numberOfMoves;
 
     // Removes stars after certain amount of turns
     if (numberOfMoves === 18) {
         starsArray[0].classList.add('hidden');
+        numberOfStars -= 1;
     } else if (numberOfMoves === 24) {
         starsArray[1].classList.add('hidden');
+        numberOfStars -= 1;
     } else if (numberOfMoves === 29) {
         starsArray[2].classList.add('hidden');
+        numberOfStars -= 1;
     }
 }
 
@@ -151,6 +158,9 @@ function restartGame() {
     for (let i = 0; i < starsArray.length; i++) {
         starsArray[i].classList.remove('hidden');
     }
+
+    modal.style.display = 'none';
+    numberOfStars = 3;
 }
 
 
@@ -159,6 +169,7 @@ function loadGame() {
     
     // Adds event listeners to all the cards and the restart button
     restart.addEventListener('click', restartGame);
+    modalButton.addEventListener('click', restartGame);
     for (let i = 0; i < cardsArray.length; i++) {
         cardsArray[i].addEventListener('click', function() {
             openCard(i);
@@ -172,18 +183,23 @@ const openCards = document.getElementsByClassName('open');
 const stars = document.getElementsByClassName('fa-star');
 const deck = document.querySelector('.deck');
 const restart = document.querySelector('.restart');
+const modal = document.querySelector('.modal');
+const modalButton = document.querySelector('.modal-button');
 
 const cardsArray = Array.prototype.slice.call(cards);
 const openCardsArray = Array.prototype.slice.call(openCards);
 const starsArray = Array.prototype.slice.call(stars);
 const pairs = [];
 const cardClasses = [];
+let numberOfStars = 3;
 
 //let moves = document.querySelector('.moves');
 
 let startTimer = setInterval(timer, 1000);    //Må være utenfor en funksjon
 
 window.onload = loadGame();
+
+
 
 
 
