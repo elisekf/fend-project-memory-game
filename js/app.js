@@ -64,9 +64,6 @@ function movesCount() {
     } else if (numberOfMoves === 24) {
         starsArray[1].classList.add('hidden');
         numberOfStars -= 1;
-    } else if (numberOfMoves === 29) {
-        starsArray[2].classList.add('hidden');
-        numberOfStars -= 1;
     }
 }
 
