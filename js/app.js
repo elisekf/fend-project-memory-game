@@ -1,22 +1,10 @@
-/*
- * Create a list that holds all of your cards
- */
-
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
-
-// Er rekkefølgen på funksjonene god?
-
+// Variables at the bottom!
 
 // Turns open cards if they don't match and removes them from openCardsArray
 function closeCards(array) {
     for (let i = 0; i < array.length; i++) {
         array[i].classList.remove('open', 'show');
+        array[i].addEventListener('click', openCard);
     }
     openCardsArray.length = 0;
 }
@@ -40,6 +28,7 @@ function timer() {
     document.querySelector('.timer').innerHTML = time;
     document.querySelector('.seconds').innerHTML = time;
 }
+
 
 // Is run when two cards are opened
 function compareCards() {
@@ -89,9 +78,12 @@ function openCard(index) {
 
     // Clicked cards go into openCardsArray until the array contains two cards
     if (openCardsArray.length < 2) {
-        openCardsArray.push(cardsArray[index]);
-        cardsArray[index].classList.add('open', 'show');
+        openCardsArray.push(this);
+        this.classList.add('open', 'show');
     }
+
+    // Hinders players from getting matches by clicking the same card twice
+    this.removeEventListener('click', openCard);
 
     // When two cards are open, the turn is counted and the cards are compared
     // If the cards match, they are added to the pairs array and openCardsArray is emptied
@@ -100,7 +92,7 @@ function openCard(index) {
         movesCount();
         compareCards();
         if (compareCards() === true) {
-            pairs.push(cardsArray[index]);
+            pairs.push(this);
             openCardsArray.length = 0;
         } else if (compareCards() === false) {
             setTimeout(closeCards, 600, openCardsArray);
@@ -175,9 +167,7 @@ function loadGame() {
     restart.addEventListener('click', restartGame);
     modalButton.addEventListener('click', restartGame);
     for (let i = 0; i < cardsArray.length; i++) {
-        cardsArray[i].addEventListener('click', function() {
-            openCard(i);
-        })
+        cardsArray[i].addEventListener('click', openCard);
     }   
 }
 
@@ -199,21 +189,3 @@ let numberOfStars = 3;
 let startTimer = 0;
 
 window.onload = loadGame();
-
-
-
-
-
-
-
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
