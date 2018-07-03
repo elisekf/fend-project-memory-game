@@ -58,10 +58,10 @@ function movesCount() {
     document.querySelector('.number-of-moves').innerHTML = numberOfMoves;
 
     // Removes stars after certain amount of turns
-    if (numberOfMoves === 18) {
+    if (numberOfMoves === 16) {
         starsArray[0].classList.add('hidden');
         numberOfStars -= 1;
-    } else if (numberOfMoves === 24) {
+    } else if (numberOfMoves === 21) {
         starsArray[1].classList.add('hidden');
         numberOfStars -= 1;
     }
